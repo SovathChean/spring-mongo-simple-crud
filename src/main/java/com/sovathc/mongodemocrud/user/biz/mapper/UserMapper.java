@@ -1,0 +1,13 @@
+package com.sovathc.mongodemocrud.user.biz.mapper;
+
+import com.sovathc.mongodemocrud.common.mapper.AbstractMapper;
+import com.sovathc.mongodemocrud.user.biz.dto.UserDTO;
+import com.sovathc.mongodemocrud.user.biz.entity.UserEntity;
+import com.sovathc.mongodemocrud.user.web.vo.request.UserCreatedRequest;
+import com.sovathc.mongodemocrud.user.web.vo.request.UserPagableRequest;
+import com.sovathc.mongodemocrud.user.web.vo.request.UserUpdatedRequest;
+import com.sovathc.mongodemocrud.user.web.vo.response.UserItemResponse;
+import com.sovathc.mongodemocrud.user.web.vo.response.UserResponse;
+
+public interface UserMapper extends AbstractMapper<UserEntity, UserDTO, UserItemResponse, UserResponse, UserCreatedRequest, UserUpdatedRequest, UserPagableRequest> {
+}
