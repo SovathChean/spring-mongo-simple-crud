@@ -40,7 +40,7 @@ public interface AbstractController <ITEM_RESPONSE, RESPONSE, CRATED_REQUEST, UP
                 .build();
     }
     @GetMapping("/find-with-page")
-    default ResponseMessage<List<ITEM_RESPONSE>> findAll(@Valid PAGEABLE_REQUEST pageableRequest) {
+    default ResponseMessage<List<ITEM_RESPONSE>> findWithPage(@Valid PAGEABLE_REQUEST pageableRequest) {
         return new ResponseBuilderMessage<List<ITEM_RESPONSE>>()
                 .success()
                 .addData(null)

@@ -8,6 +8,9 @@ import com.sovathc.mongodemocrud.user.web.vo.request.UserPagableRequest;
 import com.sovathc.mongodemocrud.user.web.vo.request.UserUpdatedRequest;
 import com.sovathc.mongodemocrud.user.web.vo.response.UserItemResponse;
 import com.sovathc.mongodemocrud.user.web.vo.response.UserResponse;
+import org.mapstruct.factory.Mappers;
 
 public interface UserMapper extends AbstractMapper<UserEntity, UserDTO, UserItemResponse, UserResponse, UserCreatedRequest, UserUpdatedRequest, UserPagableRequest> {
+
+    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 }
