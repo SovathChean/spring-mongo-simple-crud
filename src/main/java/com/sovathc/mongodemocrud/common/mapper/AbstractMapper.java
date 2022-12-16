@@ -1,14 +1,11 @@
 package com.sovathc.mongodemocrud.common.mapper;
 
-import org.mapstruct.Mapper;
+import com.sovathc.mongodemocrud.common.request.PageableRequest;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
-import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE )
-public interface AbstractMapper<ENTITY, DTO, ITEM_RESPONSE, RESPONSE, CREATED, UPDATED, PAGEABLE> {
+public interface AbstractMapper<ENTITY, DTO, ITEM_RESPONSE, RESPONSE, CREATED, UPDATED, PAGEABLE extends PageableRequest> {
 
     void dtoToEntity(DTO dto, @MappingTarget ENTITY entity);
     void entityToDto(ENTITY entity, @MappingTarget DTO dto);

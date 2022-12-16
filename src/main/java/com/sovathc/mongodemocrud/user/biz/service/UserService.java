@@ -10,6 +10,6 @@ public interface UserService {
     UserDTO update(String id, UserDTO userDTO) throws BusinessException;
     void delete(String id) throws BusinessException;
     Page<UserDTO> findAll(UserDTO dto, UserPagableRequest request);
-    UserDTO findOne(String id);
+    UserDTO findOne(String id) throws BusinessException;
 
 }

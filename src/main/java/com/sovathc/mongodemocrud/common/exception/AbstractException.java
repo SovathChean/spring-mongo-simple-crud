@@ -14,21 +14,21 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 public abstract class AbstractException extends ResponseEntityExceptionHandler {
+
     @Override
     protected ResponseEntity handleExceptionInternal(
             Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request)
     {
         super.handleExceptionInternal(ex, body, headers, status, request);
         if (ex instanceof HttpMessageNotReadableException)
-            return handleBadRequestException((HttpMessageNotReadableException) ex, status);
+            return handleBadRequestException(ex, status);
         logger.error("Error internal 500{}", ex);
 
-        return this.buildExceptionResponse(ex, HttpStatus.INTERNAL_SERVER_ERROR, SysHttpResultCode.ERROR_500.getCode());
+        return this.buildExceptionResponse(ex, HttpStatus.BAD_REQUEST, SysHttpResultCode.ERROR_500.getCode());
     }
-
     protected ResponseEntity<ResponseMessage<?>> handleBadRequestException(Exception ex, HttpStatus status)
     {
-        return this.buildExceptionResponse(ex, HttpStatus.BAD_REQUEST, SysHttpResultCode.ERROR_400.getCode());
+        return this.buildExceptionResponse(ex, status, SysHttpResultCode.ERROR_400.getCode());
     }
     @ExceptionHandler(DataAccessException.class)
     protected ResponseEntity<ResponseMessage<?>> handleDataAccessException(DataAccessException ex) {
@@ -39,18 +39,20 @@ public abstract class AbstractException extends ResponseEntityExceptionHandler {
         else if (ex instanceof InvalidDataAccessApiUsageException)
             message = "error cannot read data";
 
-        return buildExceptionResponseMessage(message, SysHttpResultCode.ERROR_400.getCode());
+        return buildExceptionResponseMessage(message, HttpStatus.BAD_REQUEST, SysHttpResultCode.ERROR_400.getCode());
     }
     public ResponseEntity<ResponseMessage<?>> buildExceptionResponse(Exception ex, HttpStatus status, String resultCode)
     {
-        return buildExceptionResponseMessage(ex.getMessage(), SysHttpResultCode.ERROR_400.getCode());
+        return buildExceptionResponseMessage(ex.getMessage(), status, resultCode);
     }
-    public ResponseEntity<ResponseMessage<?>> buildExceptionResponseMessage(String message, String resultCode)
+    public ResponseEntity<ResponseMessage<?>> buildExceptionResponseMessage(String message, HttpStatus status, String resultCode)
     {
-        ResponseMessage response = new ResponseMessage();
+        ResponseMessage<?> response = new ResponseMessage<>();
         response.setError(message);
+        response.setResult(false);
+        response.setStatus(status);
         response.setResultCode(resultCode);
 
-        return new ResponseEntity<ResponseMessage<?>>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }
