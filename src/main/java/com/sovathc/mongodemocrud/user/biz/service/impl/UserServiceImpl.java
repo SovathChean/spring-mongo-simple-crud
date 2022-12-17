@@ -19,7 +19,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +52,7 @@ public class UserServiceImpl implements UserService {
      }
 
      @Override
-     public Page<UserDTO> findAll(UserDTO dto, UserPagableRequest request) {
+     public Page<UserDTO> findAll(UserDTO dto, UserPagableRequest request) throws BusinessException {
           List<UserDTO> userList = new ArrayList<>();
           Criteria criteria = new Criteria();
 

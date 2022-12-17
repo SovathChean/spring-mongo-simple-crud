@@ -12,6 +12,7 @@ import com.sovathc.mongodemocrud.user.web.vo.request.UserPagableRequest;
 import com.sovathc.mongodemocrud.user.web.vo.request.UserUpdatedRequest;
 import com.sovathc.mongodemocrud.user.web.vo.response.UserItemResponse;
 import com.sovathc.mongodemocrud.user.web.vo.response.UserResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 
+@Tag(name = "User")
 @RestController
 @RequestMapping("api/users")
 @RequiredArgsConstructor
