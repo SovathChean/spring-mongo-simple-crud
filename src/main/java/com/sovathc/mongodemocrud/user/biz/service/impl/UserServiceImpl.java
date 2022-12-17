@@ -1,6 +1,7 @@
 package com.sovathc.mongodemocrud.user.biz.service.impl;
 
 import com.sovathc.mongodemocrud.common.exception.BusinessException;
+import com.sovathc.mongodemocrud.common.utils.FilterUtils;
 import com.sovathc.mongodemocrud.common.utils.MongoEntityUtils;
 import com.sovathc.mongodemocrud.common.utils.PageableUtils;
 import com.sovathc.mongodemocrud.common.utils.SearchUtils;
@@ -54,11 +55,13 @@ public class UserServiceImpl implements UserService {
      @Override
      public Page<UserDTO> findAll(UserDTO dto, UserPagableRequest request) {
           List<UserDTO> userList = new ArrayList<>();
-          Criteria criteria = null;
+          Criteria criteria = new Criteria();
 
           //search keyword
           if(ObjectUtils.isNotEmpty(request.getKeywords()))
-               criteria = SearchUtils.generate(template, UserSearchDTO.class, request.getKeywords());
+               SearchUtils.generate(criteria, UserSearchDTO.class, request.getKeywords());
+          if(ObjectUtils.isNotEmpty(request.getFilter()))
+               FilterUtils.generate(criteria, UserSearchDTO.class, request.getFilter());
 
           Page<UserEntity> page =  PageableUtils.generate(template, UserEntity.class, criteria, request);
           List<UserEntity> items = page.getContent();

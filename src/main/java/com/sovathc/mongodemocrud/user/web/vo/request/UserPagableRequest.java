@@ -6,4 +6,5 @@ import lombok.Data;
 @Data
 public class UserPagableRequest extends PageableRequest {
     private String keywords;
+    private String filter;
 }
