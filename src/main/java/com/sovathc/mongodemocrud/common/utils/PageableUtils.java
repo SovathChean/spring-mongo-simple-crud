@@ -17,10 +17,10 @@ import java.util.List;
 
 public class PageableUtils {
 
-    public static Page<Entity> generate(MongoTemplate template, Class<Entity> entityClass, Criteria criteria, PageableRequest request)
+    public static <Entity> Page<Entity> generate(MongoTemplate template, Class<Entity> entityClass, Criteria criteria, PageableRequest request)
     {
         Query query = new Query();
-        PageRequest pageRequest = PageRequest.of(request.getPage() - 1, request.getRpp());
+        PageRequest pageRequest = PageRequest.of(request.getPage()-1, request.getRpp());
         //add criteria
         if(ObjectUtils.isNotEmpty(criteria))
             query.addCriteria(criteria);
@@ -32,13 +32,12 @@ public class PageableUtils {
             {
                 Sort sort = Sort.by(request.getDirection(), column);
                 pageRequest = PageRequest.of(request.getPage() - 1, request.getRpp(), sort);
-                query.with(pageRequest);
             }
         }
-        query.with(pageRequest);
 
-        List<Entity> items = template.find(query, entityClass);
         long record = template.count(query, entityClass);
+        List<Entity> items = template.find(query.with(pageRequest), entityClass);
+
 
         return new PageImpl<>(items, pageRequest, record);
     }

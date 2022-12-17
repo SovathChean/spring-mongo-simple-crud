@@ -1,5 +1,6 @@
 package com.sovathc.mongodemocrud.common.controller;
 
+import com.sovathc.mongodemocrud.common.response.PageableResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,8 +41,8 @@ public interface AbstractController <ITEM_RESPONSE, RESPONSE, CRATED_REQUEST, UP
                 .build();
     }
     @GetMapping("/find-with-page")
-    default ResponseMessage<List<ITEM_RESPONSE>> findWithPage(@Valid PAGEABLE_REQUEST pageableRequest) {
-        return new ResponseBuilderMessage<List<ITEM_RESPONSE>>()
+    default ResponseMessage<PageableResponse<ITEM_RESPONSE>> findWithPage(@Valid PAGEABLE_REQUEST pageableRequest) {
+        return new ResponseBuilderMessage<PageableResponse<ITEM_RESPONSE>>()
                 .success()
                 .addData(null)
                 .build();

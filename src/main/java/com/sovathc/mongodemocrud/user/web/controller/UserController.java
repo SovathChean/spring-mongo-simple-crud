@@ -3,6 +3,7 @@ package com.sovathc.mongodemocrud.user.web.controller;
 import com.sovathc.mongodemocrud.common.controller.AbstractController;
 import com.sovathc.mongodemocrud.common.controller.ResponseBuilderMessage;
 import com.sovathc.mongodemocrud.common.controller.ResponseMessage;
+import com.sovathc.mongodemocrud.common.response.PageableResponse;
 import com.sovathc.mongodemocrud.user.biz.dto.UserDTO;
 import com.sovathc.mongodemocrud.user.biz.mapper.UserMapper;
 import com.sovathc.mongodemocrud.user.biz.service.UserService;
@@ -13,9 +14,11 @@ import com.sovathc.mongodemocrud.user.web.vo.response.UserItemResponse;
 import com.sovathc.mongodemocrud.user.web.vo.response.UserResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -36,11 +39,17 @@ public class UserController implements AbstractController<UserItemResponse, User
     }
     @SneakyThrows
     @Override
-    public ResponseMessage<List<UserItemResponse>> findWithPage(UserPagableRequest request)
+    public ResponseMessage<PageableResponse<UserItemResponse>> findWithPage(UserPagableRequest request)
     {
+        UserDTO userDTO = new UserDTO();
+        UserMapper.INSTANCE.pagableToDto(request, userDTO);
+        Page<UserDTO> page = this.service.findAll(userDTO, request);
+        List<UserItemResponse> responseList = new ArrayList<>();
+        UserMapper.INSTANCE.listDtoToListItemResponse(page.getContent(), responseList);
+        PageableResponse<UserItemResponse> response = new PageableResponse<>(page.getTotalElements(), responseList, request);
 
-        return new ResponseBuilderMessage<List<UserItemResponse>>()
-                .success().addData(null).build();
+        return new ResponseBuilderMessage<PageableResponse<UserItemResponse>>()
+                .success().addData(response).build();
     }
     @SneakyThrows
     @Override
