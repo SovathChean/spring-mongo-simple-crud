@@ -8,7 +8,7 @@ import com.sovathc.mongodemocrud.user.biz.dto.UserDTO;
 import com.sovathc.mongodemocrud.user.biz.mapper.UserMapper;
 import com.sovathc.mongodemocrud.user.biz.service.UserService;
 import com.sovathc.mongodemocrud.user.web.vo.request.UserCreatedRequest;
-import com.sovathc.mongodemocrud.user.web.vo.request.UserPagableRequest;
+import com.sovathc.mongodemocrud.user.web.vo.request.UserPageableRequest;
 import com.sovathc.mongodemocrud.user.web.vo.request.UserUpdatedRequest;
 import com.sovathc.mongodemocrud.user.web.vo.response.UserItemResponse;
 import com.sovathc.mongodemocrud.user.web.vo.response.UserResponse;
@@ -26,7 +26,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/users")
 @RequiredArgsConstructor
-public class UserController implements AbstractController<UserItemResponse, UserResponse, UserCreatedRequest, UserUpdatedRequest, UserPagableRequest> {
+public class UserController implements AbstractController<UserItemResponse, UserResponse, UserCreatedRequest, UserUpdatedRequest, UserPageableRequest> {
     private final UserService service;
     @SneakyThrows
     @Override
@@ -41,7 +41,7 @@ public class UserController implements AbstractController<UserItemResponse, User
     }
     @SneakyThrows
     @Override
-    public ResponseMessage<PageableResponse<UserItemResponse>> findWithPage(UserPagableRequest request)
+    public ResponseMessage<PageableResponse<UserItemResponse>> findWithPage(UserPageableRequest request)
     {
         UserDTO userDTO = new UserDTO();
         UserMapper.INSTANCE.pagableToDto(request, userDTO);

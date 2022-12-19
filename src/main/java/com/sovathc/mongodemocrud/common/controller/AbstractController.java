@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
-import java.util.List;
 
 public interface AbstractController <ITEM_RESPONSE, RESPONSE, CRATED_REQUEST, UPDATE_REQUEST, PAGEABLE_REQUEST>{
 

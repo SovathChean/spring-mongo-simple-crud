@@ -4,7 +4,7 @@ import com.sovathc.mongodemocrud.common.request.PageableRequest;
 import lombok.Data;
 
 @Data
-public class UserPagableRequest extends PageableRequest {
+public class UserPageableRequest extends PageableRequest {
     private String keywords;
     private String filter;
 }

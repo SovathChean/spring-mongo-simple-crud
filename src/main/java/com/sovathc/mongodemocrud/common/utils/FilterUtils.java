@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FilterUtils {
-    public static <Entity> Criteria generate(Criteria initCriteria, Class<Entity> entityClass, String filterString) throws BusinessException {
+    public static <Entity> void generate(Criteria initCriteria, Class<Entity> entityClass, String filterString) throws BusinessException {
         List<Criteria> expressions = new ArrayList<>();
         String[] filters = filterString.split("&");
         for (String filter: filters)
@@ -22,6 +22,6 @@ public class FilterUtils {
             expressions.add(Criteria.where(key).is(value));
         }
 
-        return initCriteria.andOperator(expressions.toArray(new Criteria[0]));
+        initCriteria.andOperator(expressions.toArray(new Criteria[0]));
     }
 }

@@ -10,7 +10,7 @@ import com.sovathc.mongodemocrud.user.biz.dto.UserSearchDTO;
 import com.sovathc.mongodemocrud.user.biz.entity.UserEntity;
 import com.sovathc.mongodemocrud.user.biz.mapper.UserMapper;
 import com.sovathc.mongodemocrud.user.biz.service.UserService;
-import com.sovathc.mongodemocrud.user.web.vo.request.UserPagableRequest;
+import com.sovathc.mongodemocrud.user.web.vo.request.UserPageableRequest;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.data.domain.Page;
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
      }
 
      @Override
-     public Page<UserDTO> findAll(UserDTO dto, UserPagableRequest request) throws BusinessException {
+     public Page<UserDTO> findAll(UserDTO dto, UserPageableRequest request) throws BusinessException {
           List<UserDTO> userList = new ArrayList<>();
           Criteria criteria = new Criteria();
 
