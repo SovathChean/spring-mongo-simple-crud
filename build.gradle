@@ -28,6 +28,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation group: 'org.xhtmlrenderer', name: 'flying-saucer-pdf-openpdf', version: '9.1.11'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
 	implementation 'org.springdoc:springdoc-openapi-ui:1.6.13'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'

@@ -16,9 +16,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,5 +91,20 @@ public class UserController implements AbstractController<UserItemResponse, User
         return new ResponseBuilderMessage<Void>()
                 .success().build();
     }
+    @SneakyThrows
+    @GetMapping("/pdf/{id}")
+    public ResponseMessage<Void> generatePdf(@PathVariable String id)
+    {
+        this.service.generateUserPdf(id);
 
+        return new ResponseBuilderMessage<Void>()
+                .success().build();
+    }
+    @SneakyThrows
+    @GetMapping(value = "/download/{id}",produces = MediaType.APPLICATION_PDF_VALUE)
+    public HttpEntity<byte[]> downloadPDF(@PathVariable String id, HttpServletRequest request, HttpServletResponse response)
+    {
+
+        return this.service.downloadPDF(id);
+    }
 }

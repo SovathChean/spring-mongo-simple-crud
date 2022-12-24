@@ -17,8 +17,8 @@ public interface AbstractController <ITEM_RESPONSE, RESPONSE, CRATED_REQUEST, UP
                 .addData(null)
                 .build();
     }
-    @PostMapping("/update")
-    default ResponseMessage<RESPONSE> update(String id, @Valid @RequestBody UPDATE_REQUEST request) {
+    @PostMapping("/update/{id}")
+    default ResponseMessage<RESPONSE> update(@PathVariable  String id, @Valid @RequestBody UPDATE_REQUEST request) {
         return new ResponseBuilderMessage<RESPONSE>()
                 .success()
                 .addData(null)

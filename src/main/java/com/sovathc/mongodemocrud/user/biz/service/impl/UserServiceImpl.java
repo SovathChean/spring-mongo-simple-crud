@@ -1,14 +1,14 @@
 package com.sovathc.mongodemocrud.user.biz.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sovathc.mongodemocrud.common.constants.SysHttpResultCode;
 import com.sovathc.mongodemocrud.common.exception.BusinessException;
-import com.sovathc.mongodemocrud.common.utils.FilterUtils;
-import com.sovathc.mongodemocrud.common.utils.MongoEntityUtils;
-import com.sovathc.mongodemocrud.common.utils.PageableUtils;
-import com.sovathc.mongodemocrud.common.utils.SearchUtils;
+import com.sovathc.mongodemocrud.common.utils.*;
 import com.sovathc.mongodemocrud.user.biz.dto.UserDTO;
 import com.sovathc.mongodemocrud.user.biz.dto.UserSearchDTO;
 import com.sovathc.mongodemocrud.user.biz.entity.UserEntity;
 import com.sovathc.mongodemocrud.user.biz.mapper.UserMapper;
+import com.sovathc.mongodemocrud.user.biz.service.PdfGeneratorService;
 import com.sovathc.mongodemocrud.user.biz.service.UserService;
 import com.sovathc.mongodemocrud.user.web.vo.request.UserPageableRequest;
 import lombok.RequiredArgsConstructor;
@@ -17,15 +17,25 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
      private final MongoTemplate template;
+     private final PdfGeneratorService pdfGeneratorService;
+     private final PdfGeneratorUtils utils;
 
      @Override
      public UserDTO create(UserDTO dto) {
@@ -79,5 +89,35 @@ public class UserServiceImpl implements UserService {
           UserEntity entity = MongoEntityUtils.findEntityById(template, UserEntity.class, id);
           UserMapper.INSTANCE.entityToDto(entity, userDTO);
           return userDTO;
+     }
+     @Override
+     public void generateUserPdf(String id) throws BusinessException
+     {
+          UserEntity userEntity = MongoEntityUtils.findEntityById(template, UserEntity.class, id);
+          Map<String, Object> data = new HashMap<>();
+          data.put("user", userEntity);
+
+          pdfGeneratorService.generatePdfFile("user", data, "user.pdf");
+     }
+     @Override
+     public HttpEntity<byte[]> downloadPDF(String id)throws BusinessException
+     {
+          UserEntity userEntity = MongoEntityUtils.findEntityById(template, UserEntity.class, id);
+          Map<String, Object> data = new HashMap<>();
+          data.put("user", userEntity);
+          try
+          {
+               byte[] bytes = utils.downloadPDF("user", data);
+               HttpHeaders headers = new HttpHeaders();
+               headers.setContentDisposition(ContentDisposition.builder("inline").filename("user.pdf").build());
+               headers.setContentType(MediaType.APPLICATION_PDF);
+               headers.setContentLength(bytes.length);
+
+               return new HttpEntity<>(bytes, headers);
+          }
+          catch(Exception e) {
+               throw new BusinessException(SysHttpResultCode.ERROR_500.getCode(), "Download pdf failed");
+          }
+
      }
 }
