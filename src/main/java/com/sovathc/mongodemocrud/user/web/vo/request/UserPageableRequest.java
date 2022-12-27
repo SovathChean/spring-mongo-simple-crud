@@ -7,4 +7,5 @@ import lombok.Data;
 public class UserPageableRequest extends PageableRequest {
     private String keywords;
     private String filter;
+    private String templateName;
 }

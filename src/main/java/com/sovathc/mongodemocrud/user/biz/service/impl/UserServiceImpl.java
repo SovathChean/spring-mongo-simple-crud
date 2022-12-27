@@ -1,6 +1,5 @@
 package com.sovathc.mongodemocrud.user.biz.service.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sovathc.mongodemocrud.common.constants.SysHttpResultCode;
 import com.sovathc.mongodemocrud.common.exception.BusinessException;
 import com.sovathc.mongodemocrud.common.utils.*;
@@ -23,8 +22,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -100,14 +97,14 @@ public class UserServiceImpl implements UserService {
           pdfGeneratorService.generatePdfFile("user", data, "user.pdf");
      }
      @Override
-     public HttpEntity<byte[]> downloadPDF(String id)throws BusinessException
+     public HttpEntity<byte[]> downloadPDF(String templateName, String id)throws BusinessException
      {
           UserEntity userEntity = MongoEntityUtils.findEntityById(template, UserEntity.class, id);
           Map<String, Object> data = new HashMap<>();
           data.put("user", userEntity);
           try
           {
-               byte[] bytes = utils.downloadPDF("user", data);
+               byte[] bytes = utils.downloadPDF(templateName, data);
                HttpHeaders headers = new HttpHeaders();
                headers.setContentDisposition(ContentDisposition.builder("inline").filename("user.pdf").build());
                headers.setContentType(MediaType.APPLICATION_PDF);
@@ -116,7 +113,43 @@ public class UserServiceImpl implements UserService {
                return new HttpEntity<>(bytes, headers);
           }
           catch(Exception e) {
-               throw new BusinessException(SysHttpResultCode.ERROR_500.getCode(), "Download pdf failed");
+               throw new BusinessException(SysHttpResultCode.ERROR_500.getCode(), e.getMessage());
+          }
+
+     }
+     @Override
+     public void generatePDF(String templateName, String id)throws BusinessException
+     {
+          UserEntity userEntity = MongoEntityUtils.findEntityById(template, UserEntity.class, id);
+          Map<String, Object> data = new HashMap<>();
+          data.put("user", userEntity);
+          try
+          {
+               utils.generatePdfFile(templateName, data);
+          }
+          catch(Exception e) {
+               throw new BusinessException(SysHttpResultCode.ERROR_500.getCode(), e.getMessage());
+          }
+
+     }
+     @Override
+     public HttpEntity<byte[]> downloadJapserPDF(String templateName, String id)throws BusinessException
+     {
+          UserEntity userEntity = MongoEntityUtils.findEntityById(template, UserEntity.class, id);
+          Map<String, Object> data = new HashMap<>();
+          data.put("user", userEntity);
+          try
+          {
+              byte[] bytes =  utils.generatePdfFileJasper(templateName, data);
+               HttpHeaders headers = new HttpHeaders();
+               headers.setContentDisposition(ContentDisposition.builder("inline").filename("user.pdf").build());
+               headers.setContentType(MediaType.APPLICATION_PDF);
+               headers.setContentLength(bytes.length);
+
+               return new HttpEntity<>(bytes, headers);
+          }
+          catch(Exception e) {
+               throw new BusinessException(SysHttpResultCode.ERROR_500.getCode(), e.getMessage());
           }
 
      }

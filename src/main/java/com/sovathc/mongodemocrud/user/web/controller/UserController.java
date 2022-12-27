@@ -4,6 +4,8 @@ import com.sovathc.mongodemocrud.common.controller.AbstractController;
 import com.sovathc.mongodemocrud.common.controller.ResponseBuilderMessage;
 import com.sovathc.mongodemocrud.common.controller.ResponseMessage;
 import com.sovathc.mongodemocrud.common.response.PageableResponse;
+import com.sovathc.mongodemocrud.common.utils.PdfGeneratorUtils;
+import com.sovathc.mongodemocrud.common.utils.PdfTextGenerateUtils;
 import com.sovathc.mongodemocrud.user.biz.dto.UserDTO;
 import com.sovathc.mongodemocrud.user.biz.mapper.UserMapper;
 import com.sovathc.mongodemocrud.user.biz.service.UserService;
@@ -32,6 +34,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController implements AbstractController<UserItemResponse, UserResponse, UserCreatedRequest, UserUpdatedRequest, UserPageableRequest> {
     private final UserService service;
+    private final PdfGeneratorUtils pdfGeneratorUtils;
+    private final PdfTextGenerateUtils pdfTextGenerateUtils;
     @SneakyThrows
     @Override
     public ResponseMessage<UserResponse> findOne(String id)
@@ -102,9 +106,34 @@ public class UserController implements AbstractController<UserItemResponse, User
     }
     @SneakyThrows
     @GetMapping(value = "/download/{id}",produces = MediaType.APPLICATION_PDF_VALUE)
-    public HttpEntity<byte[]> downloadPDF(@PathVariable String id, HttpServletRequest request, HttpServletResponse response)
+    public HttpEntity<byte[]> downloadPDF(@PathVariable String id, UserPageableRequest request)
     {
-
-        return this.service.downloadPDF(id);
+        return this.service.downloadPDF(request.getTemplateName(), id);
+    }
+    @SneakyThrows
+    @GetMapping(value = "/download-japer/{id}",produces = MediaType.APPLICATION_PDF_VALUE)
+    public HttpEntity<byte[]> downloadJapserPDF(@PathVariable String id, UserPageableRequest request)
+    {
+       return this.service.downloadJapserPDF(request.getTemplateName(), id);
+    }
+    @SneakyThrows
+    @GetMapping(value = "/generate-pdf/{id}",produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseMessage<Void> generatePDF(@PathVariable String id, UserPageableRequest request)
+    {
+        this.service.generatePDF(request.getTemplateName(), id);
+        return new ResponseBuilderMessage<Void>()
+                .success().build();
+    }
+    @SneakyThrows
+    @GetMapping(value = "/download-itext/{id}",produces = MediaType.APPLICATION_PDF_VALUE)
+    public void downloadItext(@PathVariable String id, UserPageableRequest request)
+    {
+       this.pdfTextGenerateUtils.pdfConverter(request.getTemplateName());
+    }
+    @SneakyThrows
+    @GetMapping(value = "/download-irontext/{id}",produces = MediaType.APPLICATION_PDF_VALUE)
+    public void downloadIronText(@PathVariable String id, UserPageableRequest request)
+    {
+        this.pdfGeneratorUtils.html2Pdf();
     }
 }

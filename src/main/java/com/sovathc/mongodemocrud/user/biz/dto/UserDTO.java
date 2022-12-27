@@ -8,4 +8,5 @@ public class UserDTO {
     private String username;
     private String keywords;
     private String filter;
+    private String templateName;
 }
