@@ -5,6 +5,9 @@ import com.sovathc.mongodemocrud.user.biz.dto.UserDTO;
 import com.sovathc.mongodemocrud.user.web.vo.request.UserPageableRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+
+import java.io.File;
 
 public interface UserService {
     UserDTO create(UserDTO dto);
@@ -16,5 +19,5 @@ public interface UserService {
     void generateUserPdf(String id) throws BusinessException;
     HttpEntity<byte[]> downloadPDF(String templateName, String id)throws BusinessException;
     void generatePDF(String templateName, String id)throws BusinessException;
-    HttpEntity<byte[]> downloadJapserPDF(String templateName, String id)throws BusinessException;
+    HttpEntity<byte[]> downloadJapserPDF()throws BusinessException;
 }

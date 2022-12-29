@@ -1,10 +1,9 @@
 package com.sovathc.mongodemocrud.common.utils;
 
-
+import com.aspose.ms.core.resources.ResourceFile;
 import com.itextpdf.html2pdf.ConverterProperties;
 import com.itextpdf.html2pdf.HtmlConverter;
 import com.itextpdf.html2pdf.resolver.font.DefaultFontProvider;
-import com.itextpdf.io.font.constants.StandardFonts;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.font.FontProvider;
@@ -14,19 +13,21 @@ import com.lowagie.text.DocumentException;
 import com.lowagie.text.pdf.BaseFont;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 import com.sovathc.mongodemocrud.common.exception.BusinessException;
+import gui.ava.html.image.generator.HtmlImageGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ResourceUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
-import org.xhtmlrenderer.layout.SharedContext;
 import org.xhtmlrenderer.pdf.ITextRenderer;
-import org.xhtmlrenderer.pdf.ITextTextRenderer;
 
-import java.awt.font.NumericShaper;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -37,12 +38,14 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
+
 @Component
 @Slf4j
 @RequiredArgsConstructor
 public class PdfGeneratorUtils {
     @Autowired
     private TemplateEngine templateEngine;
+    private String invoice_template = "reports/report.jrxml";
 
     public byte[] downloadPDF(String templateName, Map<String, Object> data) throws BusinessException {
         Context context = new Context();
@@ -84,10 +87,10 @@ public class PdfGeneratorUtils {
 
             builder.useFont(new File(Objects.requireNonNull(getClass().getClassLoader().getResource("static/font/Siemreap-Regular.ttf")).getFile()),
                     "Bayon");
-//            String fileType = "png";
-//            HtmlImageGenerator originalGenerator = new HtmlImageGenerator();
-//            originalGenerator.loadHtml(document.html());
-//            originalGenerator.saveAsImage(pdfDirectory+ "user" + "." + fileType);
+            String fileType = "png";
+            HtmlImageGenerator originalGenerator = new HtmlImageGenerator();
+            originalGenerator.loadHtml(document.html());
+            originalGenerator.saveAsImage(pdfDirectory+ "user" + "." + fileType);
 
             builder.toStream(fileOutputStream);
             builder.withHtmlContent(document.html(), "/");
@@ -111,6 +114,7 @@ public class PdfGeneratorUtils {
         try {
             // write to html
             Files.write(pathHtml, document.html().getBytes());
+
 
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
@@ -145,4 +149,39 @@ public class PdfGeneratorUtils {
 
         HtmlConverter.convertToPdf(new FileInputStream(htmlSource), new FileOutputStream(pdfDest), converterProperties);
     }
+    private JasperReport loadTemplate() throws JRException, FileNotFoundException {
+
+        File reportInputStream = ResourceUtils.getFile("classpath:reports/report.jrxml");
+        JasperDesign jasperDesign = JRXmlLoader.load(reportInputStream);
+
+        return JasperCompileManager.compileReport(jasperDesign);
+    }
+    public byte[] generateInvoiceFor() throws IOException {
+        String pdfDirectory = "D:\\backend\\pdf\\user";
+        File pdfFile = File.createTempFile(pdfDirectory, ".pdf");
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+
+        try
+        {
+            // Load invoice JRXML template.
+            final JasperReport report = loadTemplate();
+
+            // Fill parameters map.
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("data", "user");
+
+            // Create an empty datasource.
+            JasperPrint print = JasperFillManager.fillReport(report, parameters, new JREmptyDataSource());
+
+            JasperExportManager.exportReportToPdfStream(print, byteArrayOutputStream);
+
+            return byteArrayOutputStream.toByteArray();
+        }
+        catch (final Exception e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 }

@@ -33,7 +33,6 @@ dependencies {
 		exclude module:'olap4j'
 	}
 
-
 	implementation group: 'org.jsoup', name: 'jsoup', version: '1.11.2'
 	implementation 'com.openhtmltopdf:openhtmltopdf-pdfbox:1.0.10'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
@@ -42,7 +41,8 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	implementation 'com.itextpdf:itext7-core:7.2.4'
 	implementation 'com.itextpdf:html2pdf:4.0.4'
-//	implementation 'org.seuksa.itextkhmer:itextkhmer:1.0-SNAPSHOT'
+	implementation 'com.groupdocs:groupdocs-conversion:17.12'
+
 	compileOnly group: 'com.github.xuwei-k', name: 'html2image', version: '0.1.0'
 
 	annotationProcessor 'org.projectlombok:lombok'

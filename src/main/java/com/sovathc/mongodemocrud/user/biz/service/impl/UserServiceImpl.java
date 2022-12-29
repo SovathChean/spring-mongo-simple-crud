@@ -22,6 +22,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -133,14 +135,12 @@ public class UserServiceImpl implements UserService {
 
      }
      @Override
-     public HttpEntity<byte[]> downloadJapserPDF(String templateName, String id)throws BusinessException
+     public HttpEntity<byte[]> downloadJapserPDF()throws BusinessException
      {
-          UserEntity userEntity = MongoEntityUtils.findEntityById(template, UserEntity.class, id);
-          Map<String, Object> data = new HashMap<>();
-          data.put("user", userEntity);
+//          UserEntity userEntity = MongoEntityUtils.findEntityById(template, UserEntity.class, id);
           try
           {
-              byte[] bytes =  utils.generatePdfFileJasper(templateName, data);
+               byte[] bytes = utils.generateInvoiceFor();
                HttpHeaders headers = new HttpHeaders();
                headers.setContentDisposition(ContentDisposition.builder("inline").filename("user.pdf").build());
                headers.setContentType(MediaType.APPLICATION_PDF);

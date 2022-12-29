@@ -17,16 +17,22 @@ import com.sovathc.mongodemocrud.user.web.vo.response.UserResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import static javax.security.auth.callback.ConfirmationCallback.OK;
 
 @Tag(name = "User")
 @RestController
@@ -112,9 +118,9 @@ public class UserController implements AbstractController<UserItemResponse, User
     }
     @SneakyThrows
     @GetMapping(value = "/download-japer/{id}",produces = MediaType.APPLICATION_PDF_VALUE)
-    public HttpEntity<byte[]> downloadJapserPDF(@PathVariable String id, UserPageableRequest request)
+    public HttpEntity<byte[]>  downloadJapserPDF(@PathVariable String id, UserPageableRequest request)
     {
-       return this.service.downloadJapserPDF(request.getTemplateName(), id);
+        return this.service.downloadJapserPDF();
     }
     @SneakyThrows
     @GetMapping(value = "/generate-pdf/{id}",produces = MediaType.APPLICATION_PDF_VALUE)
@@ -131,9 +137,9 @@ public class UserController implements AbstractController<UserItemResponse, User
        this.pdfTextGenerateUtils.pdfConverter(request.getTemplateName());
     }
     @SneakyThrows
-    @GetMapping(value = "/download-irontext/{id}",produces = MediaType.APPLICATION_PDF_VALUE)
+    @GetMapping(value = "/download-image/{id}",produces = MediaType.APPLICATION_PDF_VALUE)
     public void downloadIronText(@PathVariable String id, UserPageableRequest request)
     {
-        this.pdfGeneratorUtils.html2Pdf();
+        this.pdfGeneratorUtils.generateInvoiceFor();
     }
 }
