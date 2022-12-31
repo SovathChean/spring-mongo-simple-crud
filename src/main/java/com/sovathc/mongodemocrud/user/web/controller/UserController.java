@@ -29,10 +29,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
+import static java.lang.String.format;
 import static javax.security.auth.callback.ConfirmationCallback.OK;
+import static org.springframework.http.MediaType.APPLICATION_PDF;
 
 @Tag(name = "User")
 @RestController
@@ -136,10 +140,12 @@ public class UserController implements AbstractController<UserItemResponse, User
     {
        this.pdfTextGenerateUtils.pdfConverter(request.getTemplateName());
     }
-    @SneakyThrows
-    @GetMapping(value = "/download-image/{id}",produces = MediaType.APPLICATION_PDF_VALUE)
-    public void downloadIronText(@PathVariable String id, UserPageableRequest request)
-    {
-        this.pdfGeneratorUtils.generateInvoiceFor();
+
+    private HttpHeaders getHttpHeaders(String code, String lang, File invoicePdf) {
+        HttpHeaders respHeaders = new HttpHeaders();
+        respHeaders.setContentType(APPLICATION_PDF);
+        respHeaders.setContentLength(invoicePdf.length());
+        respHeaders.setContentDispositionFormData("attachment", format("%s-%s.pdf", code, lang));
+        return respHeaders;
     }
 }
