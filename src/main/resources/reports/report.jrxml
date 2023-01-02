@@ -18,13 +18,6 @@
     </columnHeader>
     <detail>
         <band height="125" splitType="Stretch">
-<!--            <textField>-->
-<!--                <reportElement x="227" y="24" width="100" height="30" forecolor="#000000" uuid="56bcf05b-0cc7-4c1b-9d7b-5fa396ff6d8a"/>-->
-<!--                <textElement>-->
-<!--                    <font fontName="Academy Engraved LET"/>-->
-<!--                </textElement>-->
-<!--                <textFieldExpression><![CDATA["I Love You"]]></textFieldExpression>-->
-<!--            </textField>-->
             <staticText>
                 <reportElement key="sivath" isPrintRepeatedValues="false" x="432" y="40" width="100" height="30" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" backcolor="#FFFFFF" uuid="2e71ca7a-fa1b-4747-9276-cd0f223e01c3">
                     <property name="com.jaspersoft.studio.element.name" value="data"/>
@@ -32,7 +25,14 @@
                 <textElement>
                     <font fontName="Khmer MN"/>
                 </textElement>
-                <text><![CDATA[កម្ពុជា]]></text>
+                <text><![CDATA[ស៊ី ញ៉ាំ កម្ពុជា ស៊ឹង]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="248" y="22" width="100" height="30" uuid="b5d9965b-e813-421b-b9f2-cb2b892b200c"/>
+                <textElement>
+                    <font fontName="Bayon" size="10"/>
+                </textElement>
+                <text><![CDATA[ក្រុម]]></text>
             </staticText>
         </band>
     </detail>

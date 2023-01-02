@@ -29,10 +29,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
+import static java.lang.String.format;
 import static javax.security.auth.callback.ConfirmationCallback.OK;
+import static org.springframework.http.MediaType.APPLICATION_PDF;
 
 @Tag(name = "User")
 @RestController

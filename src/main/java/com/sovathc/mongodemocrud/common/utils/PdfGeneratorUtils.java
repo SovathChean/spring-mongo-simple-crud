@@ -1,6 +1,5 @@
 package com.sovathc.mongodemocrud.common.utils;
 
-
 import com.itextpdf.html2pdf.ConverterProperties;
 import com.itextpdf.html2pdf.HtmlConverter;
 import com.itextpdf.html2pdf.resolver.font.DefaultFontProvider;
@@ -179,9 +178,7 @@ public class PdfGeneratorUtils {
             // Create an empty datasource.
             JasperPrint print = JasperFillManager.fillReport(report, parameters, new JREmptyDataSource());
 
-            JasperExportManager.exportReportToPdfStream(print, byteArrayOutputStream);
-
-            return byteArrayOutputStream.toByteArray();
+            return JasperExportManager.exportReportToPdf(print);
         }
         catch (final Exception e)
         {
