@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
+import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import java.io.IOException;
 
@@ -31,6 +32,7 @@ public class PdfTextGenerateUtils {
         String pdfDirectory = "D:\\backend\\pdf\\user1.pdf";
         final PdfWriter writer = new PdfWriter(pdfDirectory);
         final PdfDocument pdfDocument = new PdfDocument(writer);
+
         Document document = new Document(pdfDocument);
         final FontSet set = new FontSet();
         set.addFont("bayon.ttf");

@@ -30,7 +30,7 @@
                     <property name="com.jaspersoft.studio.element.name" value="data"/>
                 </reportElement>
                 <textElement>
-                    <font fontName="Bayon"/>
+                    <font fontName="Khmer MN"/>
                 </textElement>
                 <text><![CDATA[កម្ពុជា]]></text>
             </staticText>

@@ -1,6 +1,6 @@
 package com.sovathc.mongodemocrud.common.utils;
 
-import com.aspose.ms.core.resources.ResourceFile;
+
 import com.itextpdf.html2pdf.ConverterProperties;
 import com.itextpdf.html2pdf.HtmlConverter;
 import com.itextpdf.html2pdf.resolver.font.DefaultFontProvider;
@@ -28,6 +28,7 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
+import java.awt.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -54,6 +55,7 @@ public class PdfGeneratorUtils {
         String htmlContent = templateEngine.process(templateName, context);
         Document document = Jsoup.parse(htmlContent, "UTF-8");
         document.outputSettings().syntax(Document.OutputSettings.Syntax.xml);
+//        LicenseKey.loadLicenseFile(new File("license.json"));
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             ITextRenderer renderer = new ITextRenderer();
@@ -134,20 +136,24 @@ public class PdfGeneratorUtils {
 
     }
     public void html2Pdf() throws IOException {
-        String pdfDirectory = "D:\\backend\\pdf\\user.pdf";
+        String pdfDirectory = "D:\\backend\\pdf\\user3.pdf";
         final PdfWriter writer = new PdfWriter(pdfDirectory);
         final PdfDocument pdfDocument = new PdfDocument(writer);
-        File htmlSource = new File("commercial-invoice.html");
-        File pdfDest = new File(pdfDirectory + "output.pdf");
-        FontProvider dfp = new DefaultFontProvider(true, false, false);
-        dfp.addFont("BayonRegular.ttf");
+        Context context = new Context();
+        context.setVariables(null);
+
+        String htmlContent = templateEngine.process("commercial-invoice", context);
+        Document document = Jsoup.parse(htmlContent, "UTF-8");
+        document.outputSettings().syntax(Document.OutputSettings.Syntax.xml);
+        File pdfDest = new File(pdfDirectory);
+        FontProvider dfp = new DefaultFontProvider();
+        dfp.addFont("bayon.ttf");
 
         ConverterProperties converterProperties = new ConverterProperties();
         converterProperties.setFontProvider(dfp);
-        converterProperties.setMediaDeviceDescription(new MediaDeviceDescription(MediaType.PRINT));
         converterProperties.setCharset(StandardCharsets.UTF_8.name());
 
-        HtmlConverter.convertToPdf(new FileInputStream(htmlSource), new FileOutputStream(pdfDest), converterProperties);
+        HtmlConverter.convertToPdf(document.html(), new FileOutputStream(pdfDest), converterProperties);
     }
     private JasperReport loadTemplate() throws JRException, FileNotFoundException {
 

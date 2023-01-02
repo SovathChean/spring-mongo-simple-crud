@@ -16,6 +16,7 @@ configurations {
 
 repositories {
 	mavenCentral()
+	maven {url "https://repo.itextsupport.com/releases"}
 	maven{url "https://jasperreports.sourceforge.net/maven2/"}
 	maven{url "https://jaspersoft.artifactoryonline.com/jaspersoft/third-party-ce-artifacts/"}
 }
@@ -41,6 +42,7 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	implementation 'com.itextpdf:itext7-core:7.2.4'
 	implementation 'com.itextpdf:html2pdf:4.0.4'
+	implementation 'com.itextpdf:typography:3.0.1'
 	implementation 'com.groupdocs:groupdocs-conversion:17.12'
 
 	compileOnly group: 'com.github.xuwei-k', name: 'html2image', version: '0.1.0'

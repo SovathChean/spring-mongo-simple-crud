@@ -137,6 +137,12 @@ public class UserController implements AbstractController<UserItemResponse, User
        this.pdfTextGenerateUtils.pdfConverter(request.getTemplateName());
     }
     @SneakyThrows
+    @GetMapping(value = "/download-license/{id}",produces = MediaType.APPLICATION_PDF_VALUE)
+    public void downloadLicense(@PathVariable String id, UserPageableRequest request)
+    {
+        this.pdfGeneratorUtils.html2Pdf();
+    }
+    @SneakyThrows
     @GetMapping(value = "/download-image/{id}",produces = MediaType.APPLICATION_PDF_VALUE)
     public void downloadIronText(@PathVariable String id, UserPageableRequest request)
     {
