@@ -19,10 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -145,6 +142,18 @@ public class UserController implements AbstractController<UserItemResponse, User
     public void downloadLicense(@PathVariable String id, UserPageableRequest request)
     {
         this.pdfGeneratorUtils.html2Pdf();
+    }
+    @SneakyThrows
+    @GetMapping(value = "/download-license-output/{id}",produces = MediaType.APPLICATION_PDF_VALUE)
+    public HttpEntity<byte[]> downloadLicenseOutput(@PathVariable String id, UserPageableRequest request)
+    {
+        byte[] bytes = this.pdfGeneratorUtils.html2PdfByte();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentDisposition(ContentDisposition.builder("inline").filename("user.pdf").build());
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentLength(bytes.length);
+
+        return new HttpEntity<>(bytes, headers);
     }
     @SneakyThrows
     @GetMapping(value = "/download-image/{id}",produces = MediaType.APPLICATION_PDF_VALUE)
