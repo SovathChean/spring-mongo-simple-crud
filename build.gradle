@@ -46,7 +46,6 @@ dependencies {
 //	implementation 'com.itextpdf:itext7-core:7.2.4'
 	implementation 'com.itextpdf:html2pdf:4.0.4'
 	implementation 'com.itextpdf:typography:3.0.1'
-	implementation 'com.groupdocs:groupdocs-conversion:17.12'
 
 	compileOnly group: 'com.github.xuwei-k', name: 'html2image', version: '0.1.0'
 

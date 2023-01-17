@@ -3,12 +3,13 @@ package com.sovathc.mongodemocrud.common.utils;
 
 import com.itextpdf.html2pdf.ConverterProperties;
 import com.itextpdf.html2pdf.HtmlConverter;
+import com.itextpdf.html2pdf.css.apply.ICssApplierFactory;
+import com.itextpdf.html2pdf.css.apply.impl.DefaultCssApplierFactory;
 import com.itextpdf.html2pdf.resolver.font.DefaultFontProvider;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.font.FontProvider;
 import com.itextpdf.styledxmlparser.css.media.MediaDeviceDescription;
-import com.itextpdf.styledxmlparser.css.media.MediaType;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.pdf.BaseFont;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
@@ -28,7 +29,6 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
-import java.awt.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -155,23 +155,20 @@ public class PdfGeneratorUtils {
 
         HtmlConverter.convertToPdf(document.html(), new FileOutputStream(pdfDest), converterProperties);
     }
-    public byte[] html2PdfByte() throws FileNotFoundException {
-        String pdfDirectory = "invoice.pdf";
-        final PdfWriter writer = new PdfWriter(pdfDirectory);
-        final PdfDocument pdfDocument = new PdfDocument(writer);
+    public byte[] html2PdfByte() {
         Context context = new Context();
         context.setVariables(null);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
-        String htmlContent = templateEngine.process("commercial-invoice", context);
+        String htmlContent = templateEngine.process("commercial-invoice-paid", context);
         Document document = Jsoup.parse(htmlContent, "UTF-8");
         document.outputSettings().syntax(Document.OutputSettings.Syntax.xml);
-        File pdfDest = new File(pdfDirectory);
         FontProvider dfp = new DefaultFontProvider();
         dfp.addFont("src/main/resources/static/font/bayon.ttf");
 
         ConverterProperties converterProperties = new ConverterProperties();
         converterProperties.setFontProvider(dfp);
+
         converterProperties.setCharset(StandardCharsets.UTF_8.name());
 
         HtmlConverter.convertToPdf(document.html(), byteArrayOutputStream, converterProperties);

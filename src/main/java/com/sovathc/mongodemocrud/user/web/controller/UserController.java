@@ -4,8 +4,10 @@ import com.sovathc.mongodemocrud.common.controller.AbstractController;
 import com.sovathc.mongodemocrud.common.controller.ResponseBuilderMessage;
 import com.sovathc.mongodemocrud.common.controller.ResponseMessage;
 import com.sovathc.mongodemocrud.common.response.PageableResponse;
+import com.sovathc.mongodemocrud.common.utils.PdfAddWatermarkUtils;
 import com.sovathc.mongodemocrud.common.utils.PdfGeneratorUtils;
 import com.sovathc.mongodemocrud.common.utils.PdfTextGenerateUtils;
+import com.sovathc.mongodemocrud.common.utils.PdfWaterMarkUtils;
 import com.sovathc.mongodemocrud.user.biz.dto.UserDTO;
 import com.sovathc.mongodemocrud.user.biz.mapper.UserMapper;
 import com.sovathc.mongodemocrud.user.biz.service.UserService;
@@ -17,23 +19,19 @@ import com.sovathc.mongodemocrud.user.web.vo.response.UserResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
-import org.springframework.http.*;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-
-import static java.lang.String.format;
-import static javax.security.auth.callback.ConfirmationCallback.OK;
-import static org.springframework.http.MediaType.APPLICATION_PDF;
 
 @Tag(name = "User")
 @RestController
@@ -43,6 +41,8 @@ public class UserController implements AbstractController<UserItemResponse, User
     private final UserService service;
     private final PdfGeneratorUtils pdfGeneratorUtils;
     private final PdfTextGenerateUtils pdfTextGenerateUtils;
+    private final PdfWaterMarkUtils waterMarkUtils;
+    private final PdfAddWatermarkUtils pdfAddWatermarkUtils;
     @SneakyThrows
     @Override
     public ResponseMessage<UserResponse> findOne(String id)
@@ -132,12 +132,6 @@ public class UserController implements AbstractController<UserItemResponse, User
                 .success().build();
     }
     @SneakyThrows
-    @GetMapping(value = "/download-itext/{id}",produces = MediaType.APPLICATION_PDF_VALUE)
-    public void downloadItext(@PathVariable String id, UserPageableRequest request)
-    {
-       this.pdfTextGenerateUtils.pdfConverter(request.getTemplateName());
-    }
-    @SneakyThrows
     @GetMapping(value = "/download-license/{id}",produces = MediaType.APPLICATION_PDF_VALUE)
     public void downloadLicense(@PathVariable String id, UserPageableRequest request)
     {
@@ -160,5 +154,37 @@ public class UserController implements AbstractController<UserItemResponse, User
     public void downloadIronText(@PathVariable String id, UserPageableRequest request)
     {
         this.pdfGeneratorUtils.generateInvoiceFor();
+    }
+    @SneakyThrows
+    @GetMapping(value = "/download-watermark/{id}",produces = MediaType.APPLICATION_PDF_VALUE)
+    public HttpEntity<byte[]> downloadWatermark(@PathVariable String id, UserPageableRequest request)
+    {
+        byte[] bytes = this.waterMarkUtils.generatePDFFromHTML(request.getTemplateName());
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentDisposition(ContentDisposition.builder("inline").filename("user.pdf").build());
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentLength(bytes.length);
+
+        return new HttpEntity<>(bytes, headers);
+    }
+    @SneakyThrows
+    @GetMapping(value = "/download-generate-watermark/{id}",produces = MediaType.APPLICATION_PDF_VALUE)
+    public HttpEntity<byte[]> downloadGenerateWatermark(@PathVariable String id, UserPageableRequest request)
+    {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        this.waterMarkUtils.generateWatermark(byteArrayOutputStream);
+        byte[] bytes = this.waterMarkUtils.watermarkImage(byteArrayOutputStream);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentDisposition(ContentDisposition.builder("inline").filename("user.pdf").build());
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentLength(bytes.length);
+
+        return new HttpEntity<>(bytes, headers);
+    }
+    @SneakyThrows
+    @GetMapping(value = "/download-add-watermark/{id}",produces = MediaType.APPLICATION_PDF_VALUE)
+    public void downloadAddWatermark(@PathVariable String id, UserPageableRequest request)
+    {
+        this.pdfAddWatermarkUtils.addWaterMark();
     }
 }
