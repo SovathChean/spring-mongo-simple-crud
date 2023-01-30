@@ -1,0 +1,96 @@
+<div class="row invoice-info">
+    <div class="col-md-4 col-sm-4 col-xs-4 title-invoice text-center">
+        <h5>វិក្កយបត្រ <label class="en" th:text="${data.invoiceType}"></label></h5>
+    </div>
+    <div class="col-md-3 col-sm-3 col-xs-3 invoice-no text-left">
+        <h6>លេខវិក្កយបត្រ <label class="en">Invoice No</label></h6>
+        <h6 th:text="${data.trackingNumber}"></h6>
+    </div>
+    <div class="col-md-3 col-sm-3 col-xs-3 title-order text-left">
+        <h6>អត្តលេខការកម្ម៉ង់ <label class="en">Order Id</label></h6>
+        <h6 th:text="${data.id}"></h6>
+    </div>
+    <div class="col-md-2 col-sm-2 col-xs-2 title-date text-left">
+        <h6>កាលបរិច្ឆេទ <label class="en">Date</label></h6>
+        <h6 th:text="${data.createdDate}"></h6>
+    </div>
+</div>
+<div class="row">
+    <div class="customer-info">
+        <div class="text-left">
+            <div class="customer">
+                <label class="lb-customer">អតិថិជន <span class="en">Customer</span></label>
+            </div>
+            <div class="customer-name">
+                <label class="lb-customer-name" th:text="${data.buyerName}"></label>
+            </div>
+            <div class="address">
+                <label class="lb-address">Address</label>
+                <span th:text="${data.buyerAddress}"></span>
+            </div>
+            <div class="vattin">
+                <label>(VATTIN)</label><span th:text="${data.vattin}"> </span>
+            </div>
+            <div class="tel">
+                <label th:text="${data.buyerPhone}"></label>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row tbl-item-lists">
+    <table class="table table-striped"  aria-label="Item Table"> <!-- Table for Items -->
+        <thead>
+        <th class="text-left thead-dark"><h6>ល.រ</h6><h6>No</h6></th>
+        <th class="text-left thead-dark"><h6>បរិយាយមុខទំនិញ</h6><h6>Order Items</h6></th>
+        <th class="text-right thead-dark"><h6>បរិមាណ</h6><h6>Quantity</h6></th>
+        <th class="text-right thead-dark"><h6>ឯកតា</h6><h6>Uom​</h6></th>
+        <th class="text-right thead-dark"><h6>តំលៃឯកតា</h6><h6>Unit Rate</h6></th>
+        <th class="text-right thead-dark"><h6>ថ្លៃទំនិញ</h6><h6>Amount</h6></th>
+        </thead>
+        <tbody>
+        <tr th:each="item, iterStat: ${data.items}">
+            <td class="text-left" th:text="${iterStat.index + 1}"></td>
+            <td class="text-left" th:text="${item.productName}"></td>
+            <td class="text-right" th:text="${item.qty}"></td>
+            <td class="text-right" th:text="${item.priceUnit}"></td>
+            <td class="text-right" th:text="${item.itemPrice}"></td>
+            <td class="text-right" th:text="'$' + ${item.subTotal}"></td>
+        </tr>
+        </tbody>
+        <tbody id="tfoot" class="text-right" style="font-weight: bold; display: table-row-group !important;">
+        <tr>
+            <td colspan="3"></td>
+            <td colspan="2" class="text-left"><label>សរុបរង</label><label class="en">Sub Total</label>:</td>
+            <td><span th:text="'$' +${data.subTotal}"></span></td>
+        </tr>
+        <tr>
+            <td colspan="3"></td>
+            <td colspan="2" class="text-left"><label>បញ្ចុះតំលៃ</label><label class="en">Total Discount</label>:</td>
+            <td><span th:text="'$' +${data.totalDiscount}"></span></td>
+        </tr>
+        <tr>
+            <td colspan="3"></td>
+            <td colspan="2" class="text-left"><label>ថ្លៃសេវា</label><label class="en">Service Charge</label>:</td>
+            <td><span th:text="'$' +${data.serviceCharge}"></span></td>
+        </tr>
+        <tr>
+            <td colspan="3"></td>
+            <td colspan="2" class="text-left"><label>អត្រាពន្ធ</label><label class="en">Vat (1%)</label>:</td>
+            <td><span th:text="'$' +${data.totalTax}"></span></td>
+        </tr>
+        <tr>
+            <td colspan="3"></td>
+            <td colspan="2" class="text-left"><label>ថ្លៃដឹក</label><label class="en">Delivery Fee</label>:</td>
+            <td><span th:text="'$' +${data.shippingFee}"></span></td>
+        </tr>
+        <tr class="grand-total">
+            <td colspan="3">
+                <label class="text-left total-text"><span class="kh">សរុប</span><span class="en">Grand Total</span>:</label>
+            </td>
+            <td colspan="3">
+                <label class="text-right total-amount"><span th:text="'$' + ${data.totalAmount}"></span></label>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

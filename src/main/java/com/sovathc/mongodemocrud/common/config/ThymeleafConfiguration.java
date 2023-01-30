@@ -15,4 +15,5 @@ public class ThymeleafConfiguration {
         templateResolver.setCharacterEncoding("UTF-8");
         return templateResolver;
     }
+
 }

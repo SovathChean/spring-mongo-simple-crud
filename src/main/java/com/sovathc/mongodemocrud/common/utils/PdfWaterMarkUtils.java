@@ -65,14 +65,8 @@ public class PdfWaterMarkUtils {
 
             Watermark watermark = new Watermark("Confidential");
             pdfDocument.addEventHandler(PdfDocumentEvent.END_PAGE, watermark);
-            try
-            {
-                HtmlConverter.convertToPdf(document.html(), pdfDocument, converterProperties);
 
-            }catch (Exception e)
-            {
-                log.error("12");
-            }
+            HtmlConverter.convertToPdf(document.html(), pdfDocument, converterProperties);
             pdfDocument.close();
 
             return byteArrayOutputStream1.toByteArray();
@@ -204,16 +198,14 @@ public class PdfWaterMarkUtils {
                     .setTextAlignment(TextAlignment.RIGHT)
                     .setVerticalAlignment(VerticalAlignment.BOTTOM)
                     .setHeight(page.getPageSize().getHeight() - 15)
-                    .setMarginRight(36)
-                   ;
+                    .setMarginRight(36);
             Paragraph border = new Paragraph()
                     .setBorderBottom(new SolidBorder(DeviceRgb.BLACK, 1))
                     .setFixedPosition(36, 50f, page.getPageSize().getWidth() - 72);
 
             canvas.add(watermarkParagraph);
             canvas.showTextAligned(new Paragraph(String.format("Page %s", pdf.getPageNumber(page))).setFontSize(10f),
-                    559, pageSize.getBottom() + 30, pdf.getPageNumber(page), TextAlignment.RIGHT, VerticalAlignment.BOTTOM, 0)
-                    ;
+                    559, pageSize.getBottom() + 30, pdf.getPageNumber(page), TextAlignment.RIGHT, VerticalAlignment.BOTTOM, 0);
             canvas.add(border);
             canvas.add(image1);
 
