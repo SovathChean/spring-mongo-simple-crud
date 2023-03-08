@@ -3,17 +3,13 @@ package com.sovathc.mongodemocrud.user.web.controller;
 import com.sovathc.mongodemocrud.common.controller.AbstractController;
 import com.sovathc.mongodemocrud.common.controller.ResponseBuilderMessage;
 import com.sovathc.mongodemocrud.common.controller.ResponseMessage;
+import com.sovathc.mongodemocrud.common.exception.BusinessException;
 import com.sovathc.mongodemocrud.common.response.PageableResponse;
-import com.sovathc.mongodemocrud.common.utils.PdfAddWatermarkUtils;
-import com.sovathc.mongodemocrud.common.utils.PdfGeneratorUtils;
-import com.sovathc.mongodemocrud.common.utils.PdfTextGenerateUtils;
-import com.sovathc.mongodemocrud.common.utils.PdfWaterMarkUtils;
+import com.sovathc.mongodemocrud.common.utils.*;
 import com.sovathc.mongodemocrud.user.biz.dto.UserDTO;
 import com.sovathc.mongodemocrud.user.biz.mapper.UserMapper;
 import com.sovathc.mongodemocrud.user.biz.service.UserService;
-import com.sovathc.mongodemocrud.user.web.vo.request.UserCreatedRequest;
-import com.sovathc.mongodemocrud.user.web.vo.request.UserPageableRequest;
-import com.sovathc.mongodemocrud.user.web.vo.request.UserUpdatedRequest;
+import com.sovathc.mongodemocrud.user.web.vo.request.*;
 import com.sovathc.mongodemocrud.user.web.vo.response.UserItemResponse;
 import com.sovathc.mongodemocrud.user.web.vo.response.UserResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,14 +20,14 @@ import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.io.ByteArrayOutputStream;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Tag(name = "User")
 @RestController
@@ -186,5 +182,42 @@ public class UserController implements AbstractController<UserItemResponse, User
     public void downloadAddWatermark(@PathVariable String id, UserPageableRequest request)
     {
         this.pdfAddWatermarkUtils.addWaterMark();
+    }
+    @SneakyThrows
+    @PostMapping(value="/valid")
+    public String validateUrl(@RequestBody @Valid UserValidateUrl requestUrl)
+    {
+        boolean isMatch = Pattern.compile("\"^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]\"")
+                .matcher(requestUrl.getCallbackUrl())
+                .find();
+
+        if(Boolean.FALSE.equals(isMatch))
+            throw new BusinessException("S001", "Error https.");
+        return requestUrl.getCallbackUrl();
+    }
+    @SneakyThrows
+    @PostMapping(value="/test/get/crc")
+    public String getCrc(@RequestBody @Valid CrcRequest request)
+    {
+        String crc = String.format("%s|%s|%s", request.getOrderReferenceNo(), request.getCurrency(), request.getTotal());
+
+        return CrcUtils.encode(crc, request.getSalt());
+    }
+    @SneakyThrows
+    @PostMapping(value="/test/compare/crc")
+    public Boolean compareCrc(@RequestBody @Valid CrcRequest request)
+    {
+        String getCrc = request.getCrc();
+        String crc = String.format("%s|%s|%s", request.getOrderReferenceNo(), request.getCurrency(), request.getTotal());
+        String realString = String.format("%s|%s", request.getOrderReferenceNo(), request.getCurrency(), request.getTotal());
+
+        return CrcUtils.encode(crc, request.getSalt()).equalsIgnoreCase(getCrc);
+    }
+    @SneakyThrows
+    @GetMapping(value="/test/date-converter")
+    public String dateConverter()
+    {
+        return DateFormatConverterUtils.simpleConvert(LocalDateTime.now(), "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+
     }
 }

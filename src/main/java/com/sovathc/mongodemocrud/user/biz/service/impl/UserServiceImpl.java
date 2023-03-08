@@ -9,6 +9,7 @@ import com.sovathc.mongodemocrud.user.biz.entity.UserEntity;
 import com.sovathc.mongodemocrud.user.biz.mapper.UserMapper;
 import com.sovathc.mongodemocrud.user.biz.service.PdfGeneratorService;
 import com.sovathc.mongodemocrud.user.biz.service.UserService;
+import com.sovathc.mongodemocrud.user.biz.service.support.UserServiceSupport;
 import com.sovathc.mongodemocrud.user.web.vo.request.UserPageableRequest;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
@@ -35,6 +36,7 @@ public class UserServiceImpl implements UserService {
      private final MongoTemplate template;
      private final PdfGeneratorService pdfGeneratorService;
      private final PdfGeneratorUtils utils;
+     private final UserServiceSupport support;
 
      @Override
      public UserDTO create(UserDTO dto) {
