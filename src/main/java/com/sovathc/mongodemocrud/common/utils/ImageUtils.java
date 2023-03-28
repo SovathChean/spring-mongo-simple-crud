@@ -30,7 +30,7 @@ public class ImageUtils {
         byte[] innerdata =
                 DatatypeConverter.parseBase64Binary(innerImage.substring(innerImage.indexOf(",") + 1));
         BufferedImage inner = ImageIO.read(new ByteArrayInputStream(innerdata));
-        Font font = new Font("Arial", Font.BOLD, 18);
+        Font font = new Font("Inter",  Font.PLAIN, 12);
         // New Image
         BufferedImage modified =
                 new BufferedImage(frameWidth, frameHeight, BufferedImage.TYPE_INT_ARGB);
@@ -38,8 +38,10 @@ public class ImageUtils {
         graphics.drawImage(frame, 0, 0, frameWidth, frameHeight, null);
         graphics.drawImage(inner, x, y, innerWidth, innerHeight, null);
         graphics.setFont(font);
-        graphics.setColor(Color.BLUE);
-        graphics.drawString("User Name:", 30, 40);
+        graphics.setColor(Color.BLACK);
+        graphics.drawString("User Name", 30, 66);
+        graphics.setFont(new Font("Inter", Font.BOLD, 21));
+        graphics.drawString("$ X,XXX", 30, 96);
         graphics.dispose();
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
