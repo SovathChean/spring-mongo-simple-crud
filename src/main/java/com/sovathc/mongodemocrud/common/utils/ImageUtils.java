@@ -50,4 +50,39 @@ public class ImageUtils {
         String base64bytes = Base64Utils.encodeToString(bytes);
         return "data:image/png;base64," + base64bytes;
     }
+    @SneakyThrows
+    public static final String decorate(
+            String frameImage,
+            Integer frameWidth,
+            Integer frameHeight,
+            Integer headerHeight,
+            String innerImage,
+            String extension) {
+        // Frame
+        byte[] famedata =
+                DatatypeConverter.parseBase64Binary(frameImage.substring(frameImage.indexOf(",") + 1));
+        BufferedImage frame = ImageIO.read(new ByteArrayInputStream(famedata));
+        // Inner Image
+        byte[] innerdata =
+                DatatypeConverter.parseBase64Binary(innerImage.substring(innerImage.indexOf(",") + 1));
+        BufferedImage inner = ImageIO.read(new ByteArrayInputStream(innerdata));
+        // New Image
+        int type = BufferedImage.TYPE_INT_RGB;
+        switch (extension) {
+            case "png": type = BufferedImage.TYPE_INT_ARGB;
+                break;
+            default: break;
+        }
+        BufferedImage modified =
+                new BufferedImage(frameWidth, frameHeight, type);
+        Graphics2D graphics = (Graphics2D) modified.getGraphics();
+        graphics.drawImage(inner, 0, frameHeight - frameWidth, frameWidth, frameHeight, Color.WHITE, null);
+        graphics.drawImage(frame, 0, 0, frameWidth, headerHeight, Color.WHITE, null);
+        graphics.dispose();
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ImageIO.write(modified, extension, out);
+        byte[] bytes = out.toByteArray();
+        return Base64Utils.encodeToString(bytes);
+    }
 }
