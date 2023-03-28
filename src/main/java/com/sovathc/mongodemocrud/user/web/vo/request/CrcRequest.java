@@ -11,4 +11,5 @@ public class CrcRequest {
     private String transactionId;
     private String crc;
     private String salt;
+    private String fee;
 }

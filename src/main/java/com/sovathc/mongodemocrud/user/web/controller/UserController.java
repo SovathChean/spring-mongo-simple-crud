@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -27,6 +28,7 @@ import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 @Tag(name = "User")
@@ -204,6 +206,14 @@ public class UserController implements AbstractController<UserItemResponse, User
         return CrcUtils.encode(crc, request.getSalt());
     }
     @SneakyThrows
+    @PostMapping(value="/test/get/crc/callback")
+    public String getCallbackCrc(@RequestBody @Valid CrcRequest request)
+    {
+        String crc = String.format("%s|%s|%s|%s|%s", request.getOrderReferenceNo(), request.getTransactionId(), request.getCurrency(), request.getTotal(), request.getFee());
+
+        return CrcUtils.encode(crc, request.getSalt());
+    }
+    @SneakyThrows
     @PostMapping(value="/test/compare/crc")
     public Boolean compareCrc(@RequestBody @Valid CrcRequest request)
     {
@@ -218,6 +228,12 @@ public class UserController implements AbstractController<UserItemResponse, User
     public String dateConverter()
     {
         return DateFormatConverterUtils.simpleConvert(LocalDateTime.now(), "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+    }
 
+    @SneakyThrows
+    @GetMapping(value="/test/aggregation")
+    public AggregationResults<Map> aggregationUser()
+    {
+        return service.testAggregationMongo();
     }
 }

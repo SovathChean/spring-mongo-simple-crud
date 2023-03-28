@@ -16,6 +16,9 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.GroupOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpEntity;
@@ -23,8 +26,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -154,5 +155,12 @@ public class UserServiceImpl implements UserService {
                throw new BusinessException(SysHttpResultCode.ERROR_500.getCode(), e.getMessage());
           }
 
+     }
+     @Override
+     public AggregationResults<Map> testAggregationMongo()
+     {
+          GroupOperation groupOperation = Aggregation.group("username").count().as("count");
+          Aggregation aggregation = Aggregation.newAggregation(UserEntity.class, groupOperation);
+          return template.aggregate(aggregation, UserEntity.class, Map.class);
      }
 }

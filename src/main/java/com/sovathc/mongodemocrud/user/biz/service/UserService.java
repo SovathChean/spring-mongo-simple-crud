@@ -4,10 +4,12 @@ import com.sovathc.mongodemocrud.common.exception.BusinessException;
 import com.sovathc.mongodemocrud.user.biz.dto.UserDTO;
 import com.sovathc.mongodemocrud.user.web.vo.request.UserPageableRequest;
 import org.springframework.data.domain.Page;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 
 import java.io.File;
+import java.util.Map;
 
 public interface UserService {
     UserDTO create(UserDTO dto);
@@ -20,4 +22,5 @@ public interface UserService {
     HttpEntity<byte[]> downloadPDF(String templateName, String id)throws BusinessException;
     void generatePDF(String templateName, String id)throws BusinessException;
     HttpEntity<byte[]> downloadJapserPDF()throws BusinessException;
+    AggregationResults<Map> testAggregationMongo();
 }
