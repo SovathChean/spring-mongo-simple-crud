@@ -9,6 +9,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.text.AttributedCharacterIterator;
+import java.util.ArrayList;
 
 public class ImageUtils {
 
@@ -47,9 +49,8 @@ public class ImageUtils {
         graphics.drawImage(inner, x*coefficient, y*coefficient, innerWidth*coefficient, innerHeight*coefficient, null);
         graphics.setFont(font);
         graphics.setColor(Color.BLACK);
-        graphics.drawString("SO PSP KHR Supplier CO,. LTD SO PSP KHR Supplier CO,. LTD ", 30*2, 66*2);
-        graphics.setFont(new Font("Inter", Font.BOLD, 21*coefficient));
-        graphics.drawString("$ 1,000,000,000,000", 30*coefficient, 96*coefficient);
+        merchantNameStringShow(graphics, "SO PSP KHR Supplier CO,. LTD SO PSP KHR");
+        amountStringShow(graphics, new Font("Inter",  Font.PLAIN, 21*coefficient), "៛1,000,000,000,000,000,000,000", innerWidth*coefficient);
         graphics.dispose();
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -91,5 +92,25 @@ public class ImageUtils {
         ImageIO.write(modified, extension, out);
         byte[] bytes = out.toByteArray();
         return Base64Utils.encodeToString(bytes);
+    }
+    protected static void merchantNameStringShow(Graphics2D graphics, String merchantName){
+        String showString = StringUtils.removeStringWithLength(merchantName, 35) + "...";
+        graphics.drawString(showString, 30*2, 66*2);
+    }
+    protected static void amountStringShow(Graphics2D graphics, Font font, String amountUsing, int limitWidth){
+        FontMetrics fontMetrics = graphics.getFontMetrics(font);
+        //support more than 12 digit
+        if(fontMetrics.stringWidth(amountUsing) > limitWidth)
+        {
+            //support more than 12 digit
+            Font fontSupport = new Font("Inter", Font.BOLD, 14*2);
+            graphics.setFont(fontSupport);
+            graphics.drawString(amountUsing, 30*2, 96*2);
+        }
+        else
+        {
+            graphics.setFont(font);
+            graphics.drawString(amountUsing, 30*2, 96*2);
+        }
     }
 }
