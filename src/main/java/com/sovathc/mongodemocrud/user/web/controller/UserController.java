@@ -41,6 +41,7 @@ public class UserController implements AbstractController<UserItemResponse, User
     private final PdfTextGenerateUtils pdfTextGenerateUtils;
     private final PdfWaterMarkUtils waterMarkUtils;
     private final PdfAddWatermarkUtils pdfAddWatermarkUtils;
+    private final TelegramUtils telegramUtils;
     @SneakyThrows
     @Override
     public ResponseMessage<UserResponse> findOne(String id)
@@ -235,5 +236,11 @@ public class UserController implements AbstractController<UserItemResponse, User
     public AggregationResults<Map> aggregationUser()
     {
         return service.testAggregationMongo();
+    }
+    @SneakyThrows
+    @PostMapping(value="/send-telegram")
+    public void sendTelegram(@RequestBody KhQrCallbackRequestVO requestVO)
+    {
+        telegramUtils.sendMessage(requestVO);
     }
 }

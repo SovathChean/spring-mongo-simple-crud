@@ -12,9 +12,11 @@
     <link rel="preconnect" th:href="@{https://fonts.googleapis.com}" />
     <link rel="preconnect" th:href="@{https://fonts.gstatic.com}" />
     <style>
-          body {
-        font-family: "Inter", Helvetica, Arial, sans-serif, Battambang;
+             body {
+         font-family: "Inter", Helvetica, Arial, sans-serif, Battambang;
+         font-size: 12px;
     }
+
     .container .title h1.en {
         font-size: 20px;
         font-weight: bold;
@@ -61,7 +63,7 @@
         font-weight: bold;
     }
     .container .tbl-item-lists table h6 {
-        font-size: 14px;
+        font-size: 13px;
         font-weight: 500;
         text-transform: uppercase;
         padding: 0px;
@@ -140,16 +142,16 @@
     }
     .qr-code-info .qr-code .khqr {
         border-radius: 5px;
-        background-image: url(https://d3acsj8nrl7kd.cloudfront.net/market/dev-mkt/invoice/null/user/135//invoice-41332179-e25f-4280-8360-54f6b6171fa3.png);
+<!--        background-image: url(https://d3acsj8nrl7kd.cloudfront.net/market/dev-mkt/invoice/null/user/135//invoice-41332179-e25f-4280-8360-54f6b6171fa3.png);-->
         width: 150px;
-        height: 200px;
+        height: 180px;
         position: relative;
         background-repeat: no-repeat;
     }
     .qr-code-info .qr-code .khqr img {
-        padding: 25px 0px 5px 5px;
-        height: 150px;
-        width: 140px;
+        padding: 0px;
+        height: 175px;
+        width: 100%;
     }
     .qr-code-info .qr-code .khqr,
     .qr-code-info .note {
@@ -157,7 +159,7 @@
         border-radius: 5px;
     }
     .qr-code-info .note {
-        margin-left: -20px;
+        margin-left: -10px;
     }
     .qr-code-info .note h5 {
         font-size: 16px;
@@ -198,19 +200,32 @@
     .wing-info h6 {
         font-weight: bold;
     }
-
+    table tr:nth-child(8n) {
+        page-break-after: always;
+        page-break-inside: avoid;
+    }
     .kh-info
     {
        page-break-inside: avoid;
     }
-    @page {
 
-        size: A4 portrial;
+    footer {
+      position: running(footer);
+    }
+    footer .page-num:after {
+        counter-increment: page;
+        content: counter(page)
+    }
+    footer .wing-platform
+    {
+        font-size: 12px;
+        text-transform: uppercase;
+        margin-top: 10px;
     }
     @media print {
     body {-webkit-print-color-adjust: exact;}
     }
-  .invoice-title
+    .invoice-title
     {
         font-weight: 700;
         margin-top: 20px;
@@ -218,7 +233,8 @@
     .order-info
     {
         border: 1px solid #CCD1D9;
-        padding: 20px;
+        padding: 15px;
+        margin-bottom: 30px;
     }
     .customer-info
     {
@@ -227,7 +243,16 @@
     .order-detail
     {
         margin-top: 30px;
+
     }
+     #invoice-detail td
+     {
+        padding: 5px;
+        font-size: 11px;
+     }
+    .table-striped>tbody>tr:nth-of-type(odd) {
+        background-color: #E5E8EC;
+     }
 
 </style>
 </head>
@@ -442,7 +467,7 @@
     <div class="row qr-code-info">
         <div class="col-md-3 col-sm-3 col-xs-3 qr-code">
             <div class="khqr">
-                <img style=" margin-left: 5px; margin-top: 25px; position: absolute;" src="https://dfhajuscyucpz.cloudfront.net/local/market/khqr/5hu1xa1/inv-INV-230590000014041.png">
+                <img style=" margin-left: 5px; margin-top: 25px; position: absolute;" src="https://dfhajuscyucpz.cloudfront.net/dev/khqr/market/gwlmo/inv-231000000137359.png">
             </div>
         </div>
         <div class="col-md-5 col-sm-5 col-xs-5 note">

@@ -1,96 +1,295 @@
-<div class="row invoice-info">
-    <div class="col-md-4 col-sm-4 col-xs-4 title-invoice text-center">
-        <h5>វិក្កយបត្រ <label class="en" th:text="${data.invoiceType}"></label></h5>
-    </div>
-    <div class="col-md-3 col-sm-3 col-xs-3 invoice-no text-left">
-        <h6>លេខវិក្កយបត្រ <label class="en">Invoice No</label></h6>
-        <h6 th:text="${data.trackingNumber}"></h6>
-    </div>
-    <div class="col-md-3 col-sm-3 col-xs-3 title-order text-left">
-        <h6>អត្តលេខការកម្ម៉ង់ <label class="en">Order Id</label></h6>
-        <h6 th:text="${data.id}"></h6>
-    </div>
-    <div class="col-md-2 col-sm-2 col-xs-2 title-date text-left">
-        <h6>កាលបរិច្ឆេទ <label class="en">Date</label></h6>
-        <h6 th:text="${data.createdDate}"></h6>
-    </div>
-</div>
-<div class="row">
-    <div class="customer-info">
-        <div class="text-left">
-            <div class="customer">
-                <label class="lb-customer">អតិថិជន <span class="en">Customer</span></label>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xml:lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title th:text="${data.invoiceType}"></title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet"
+          th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css}"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous"/>
+    <link rel="preconnect" th:href="@{https://fonts.googleapis.com}" />
+    <link rel="preconnect" th:href="@{https://fonts.gstatic.com}" />
+    <style>
+     body {
+         font-family: "Inter", Helvetica, Arial, sans-serif, Battambang;
+         font-size: 12px;
+    }
+
+    .container .title h1.en {
+        font-size: 20px;
+        font-weight: bold;
+        text-transform: uppercase;
+        margin-top: 10px;
+    }
+    .container .sub-company-info,
+    .container .company-info {
+        font-size: 12px;
+        display: inline-block;
+    }
+    .container .invoice-info {
+        border: solid 1px #E5E8EC;
+        margin: 15px -16px;
+    }
+    .container .invoice-info .title-invoice {
+        background-color: #E5E8EC;
+    }
+    .container .invoice-info .title-invoice h5 {
+        text-transform: uppercase;
+        font-weight: bold;
+        padding: 13px;
+        margin-bottom: 5px;
+    }
+    .container .invoice-info h5 label.en,
+    .container .customer-info .address label.lb-address {
+        text-transform: uppercase;
+    }
+    .container .customer-info {
+        margin-bottom: 15px;
+        font-size: 12px;
+    }
+    .container .customer-info label.lb-customer {
+        font-size: 14px;
+    }
+    .container .customer-info label.lb-customer span.en {
+        text-transform: uppercase;
+        font-size: 12px;
+        font-weight: bold;
+    }
+    .container .customer-info label.lb-customer-name {
+        font-size: 16px;
+        text-transform: uppercase;
+        font-weight: bold;
+    }
+    .container .tbl-item-lists table h6 {
+        font-size: 13px;
+        font-weight: 500;
+        text-transform: uppercase;
+        padding: 0px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+    .table-striped>#tfoot>tr:nth-of-type(odd)
+    {
+        background-color: #fff !important;
+    }
+    .table #tfoot tr.grand-total,
+    .tbl-item-lists table .thead-dark {
+        background-color: #000;
+        color: #fff;
+    }
+    .table thead th.thead-dark{
+       background-color: #000;
+       color: #fff;
+    }
+    .table>tbody>tr>td,
+    .table>tbody>tr>th,
+    .table>#tfoot>tr>td,
+    .table>#tfoot>tr>th,
+    .table>thead>tr>td,
+    .table>thead>tr>th {
+        border-top: 0;
+        border-bottom: 0;
+    }
+    .table #tfoot tr>td {
+        padding: 0px 8px;
+    }
+    .table #tfoot tr.grand-total>td {
+        padding: 10px;
+    }
+    .table #tfoot tr.grand-total label.total-text {
+        width: 100%;
+    }
+    .table #tfoot tr.grand-total label.total-text span.kh,
+    .table #tfoot tr.grand-total .total-amount {
+        font-size: 16px;
+    }
+    .table #tfoot label.en,
+    .payment-info ul span.en,
+    .table #tfoot tr.grand-total span.en,
+    .wing-info h6,
+    .qr-code-info .buyer label.en {
+        text-transform: uppercase;
+    }
+    .table #tfoot label.en {
+        padding-left: 5px;
+        font-size: 12px;
+    }
+    .payment-info ul {
+        list-style: none;
+        margin-left: 0px;
+        padding-left: 0px;
+    }
+    .payment-info ul label {
+        width: 30%;
+    }
+    .payment-info label {
+        font-weight: normal;
+    }
+    .payment-info label.payment-method-en {
+        font-size: 16px;
+        font-weight: bold;
+    }
+    .payment-info ul span.en {
+        padding-left: 5px;
+    }
+    .payment-info label.font-weight-bold {
+        font-weight: bold;
+    }
+    .qr-code-info .qr-code {
+        padding-left: 0px;
+    }
+    .qr-code-info .qr-code .khqr {
+        border-radius: 5px;
+<!--        background-image: url(https://d3acsj8nrl7kd.cloudfront.net/market/dev-mkt/invoice/null/user/135//invoice-41332179-e25f-4280-8360-54f6b6171fa3.png);-->
+        width: 150px;
+        height: 180px;
+        position: relative;
+        background-repeat: no-repeat;
+    }
+    .qr-code-info .qr-code .khqr img {
+        padding: 0px;
+        height: 175px;
+        width: 100%;
+    }
+    .qr-code-info .qr-code .khqr,
+    .qr-code-info .note {
+        border: 1px solid #CCD1D9;
+        border-radius: 5px;
+    }
+    .qr-code-info .note {
+        margin-left: -10px;
+    }
+    .qr-code-info .note h5 {
+        font-size: 16px;
+        font-weight: bold;
+    }
+    .qr-code-info .note ul {
+        padding-left: 20px;
+    }
+    .qr-code-info .buyer {
+        min-height: 110px;
+    }
+    .qr-code-info .buyer,
+    .qr-code-info .seller {
+        border-top: solid 1px #CCD1D9;
+    }
+    .qr-code-info .buyer label.kh,
+    .qr-code-info .seller label.kh {
+        font-weight: normal;
+    }
+    .qr-code-info .buyer label.en {
+        font-size: 12px;
+        font-weight: bold;
+    }
+    .wing-info {
+        border-top: solid 1px #000;
+        margin-top:15px;
+    }
+    .wing-info .logo {
+        padding-top: 5px;
+        padding-left: 0px;
+    }
+    .wing-info .wingmarket {
+        padding-right: 0px;
+    }
+    .wing-info .wingmarket span {
+        font-size: 10px;
+    }
+    .wing-info h6 {
+        font-weight: bold;
+    }
+    table tr:nth-child(8n) {
+        page-break-after: always;
+        page-break-inside: avoid;
+    }
+    .kh-info
+    {
+       page-break-inside: avoid;
+    }
+
+    footer {
+      position: running(footer);
+    }
+    footer .page-num:after {
+        counter-increment: page;
+        content: counter(page)
+    }
+    footer .wing-platform
+    {
+        font-size: 12px;
+        text-transform: uppercase;
+        margin-top: 10px;
+    }
+    @media print {
+    body {-webkit-print-color-adjust: exact;}
+    }
+    .invoice-title
+    {
+        font-weight: 700;
+        margin-top: 20px;
+    }
+    .order-info
+    {
+        border: 1px solid #CCD1D9;
+        padding: 15px;
+        margin-bottom: 30px;
+    }
+    .customer-info
+    {
+        /* padding: 20px; */
+    }
+    .order-detail
+    {
+        margin-top: 30px;
+
+    }
+     #invoice-detail td
+     {
+        padding: 5px;
+        font-size: 11px;
+     }
+    .table-striped>tbody>tr:nth-of-type(odd) {
+        background-color: #E5E8EC;
+     }
+
+</style>
+</head>
+<body>
+
+<div class="container invoice">
+
+    <div class="kh-info">
+        <div class="row qr-code-info">
+            <div class="col-md-3 col-sm-3 col-xs-3 qr-code">
+                <div class="khqr">
+                    <img th:src="@{${data.khQr}}"  style=" margin: 0px; position: absolute;" alt="QR Code">
+                </div>
             </div>
-            <div class="customer-name">
-                <label class="lb-customer-name" th:text="${data.buyerName}"></label>
+            <div class="col-md-5 col-sm-5 col-xs-5">
+
             </div>
-            <div class="address">
-                <label class="lb-address">Address</label>
-                <span th:text="${data.buyerAddress}"></span>
+            <div class="col-md-5 col-sm-5 col-xs-5 note">
+                <h5>កំណត់សំគាល់ NOTED</h5>
+                <ul>
+                    <li>លោកអ្នកអាចបង់ប្រាក់តាមរយៈការផ្ទេរប្រាក់ស្ថាប័នហិរញ្ញវត្ថុផ្សេងៗទៅកាន់គណនីខាងលើ ឬ តាមរយៈការស្កេន QRកូដ តាមកម្មវិធីនៃស្ថាប័នហិរញ្ញវត្ថុដែលគាំទ្រ KHQR។</li>
+                    <li>កម្រៃសេវាកម្មនៃការផ្ទេរប្រាក់ជាទំនួលខុសត្រូវរបស់អ្នក។</li>
+                    <li>សូមផ្ដល់ពត៌មានដែលបានទូទាត់ទៅកាន់ លេខទូរស័ព្ទ៖</li>
+                </ul>
             </div>
-            <div class="vattin">
-                <label>(VATTIN)</label><span th:text="${data.vattin}"> </span>
-            </div>
-            <div class="tel">
-                <label th:text="${data.buyerPhone}"></label>
+            <div class="col-md-4 col-sm-4 col-xs-4">
+                <div class="buyer">
+                    <label class="kh">ហត្ថលេខា និង ឈ្មោះអ្នកលក់</label>
+                    <label class="en" style="font-size: 12px !important;">SELLER'S SIGNATURE & NAME</label>
+                </div>
+                <div class="seller">
+                    <label class="kh">ហត្ថលេខា និង ឈ្មោះអ្នកទិញ</label>
+                    <label class="en" style="font-size: 12px !important;">CUSTOMER'S SIGNATURE & NAME</label>
+                </div>
             </div>
         </div>
     </div>
 </div>
-<div class="row tbl-item-lists">
-    <table class="table table-striped"  aria-label="Item Table"> <!-- Table for Items -->
-        <thead>
-        <th class="text-left thead-dark"><h6>ល.រ</h6><h6>No</h6></th>
-        <th class="text-left thead-dark"><h6>បរិយាយមុខទំនិញ</h6><h6>Order Items</h6></th>
-        <th class="text-right thead-dark"><h6>បរិមាណ</h6><h6>Quantity</h6></th>
-        <th class="text-right thead-dark"><h6>ឯកតា</h6><h6>Uom​</h6></th>
-        <th class="text-right thead-dark"><h6>តំលៃឯកតា</h6><h6>Unit Rate</h6></th>
-        <th class="text-right thead-dark"><h6>ថ្លៃទំនិញ</h6><h6>Amount</h6></th>
-        </thead>
-        <tbody>
-        <tr th:each="item, iterStat: ${data.items}">
-            <td class="text-left" th:text="${iterStat.index + 1}"></td>
-            <td class="text-left" th:text="${item.productName}"></td>
-            <td class="text-right" th:text="${item.qty}"></td>
-            <td class="text-right" th:text="${item.priceUnit}"></td>
-            <td class="text-right" th:text="${item.itemPrice}"></td>
-            <td class="text-right" th:text="'$' + ${item.subTotal}"></td>
-        </tr>
-        </tbody>
-        <tbody id="tfoot" class="text-right" style="font-weight: bold; display: table-row-group !important;">
-        <tr>
-            <td colspan="3"></td>
-            <td colspan="2" class="text-left"><label>សរុបរង</label><label class="en">Sub Total</label>:</td>
-            <td><span th:text="'$' +${data.subTotal}"></span></td>
-        </tr>
-        <tr>
-            <td colspan="3"></td>
-            <td colspan="2" class="text-left"><label>បញ្ចុះតំលៃ</label><label class="en">Total Discount</label>:</td>
-            <td><span th:text="'$' +${data.totalDiscount}"></span></td>
-        </tr>
-        <tr>
-            <td colspan="3"></td>
-            <td colspan="2" class="text-left"><label>ថ្លៃសេវា</label><label class="en">Service Charge</label>:</td>
-            <td><span th:text="'$' +${data.serviceCharge}"></span></td>
-        </tr>
-        <tr>
-            <td colspan="3"></td>
-            <td colspan="2" class="text-left"><label>អត្រាពន្ធ</label><label class="en">Vat (1%)</label>:</td>
-            <td><span th:text="'$' +${data.totalTax}"></span></td>
-        </tr>
-        <tr>
-            <td colspan="3"></td>
-            <td colspan="2" class="text-left"><label>ថ្លៃដឹក</label><label class="en">Delivery Fee</label>:</td>
-            <td><span th:text="'$' +${data.shippingFee}"></span></td>
-        </tr>
-        <tr class="grand-total">
-            <td colspan="3">
-                <label class="text-left total-text"><span class="kh">សរុប</span><span class="en">Grand Total</span>:</label>
-            </td>
-            <td colspan="3">
-                <label class="text-right total-amount"><span th:text="'$' + ${data.totalAmount}"></span></label>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+</body>
+</html>
