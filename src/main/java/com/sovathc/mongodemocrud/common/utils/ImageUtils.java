@@ -48,7 +48,7 @@ public class ImageUtils {
         graphics.setFont(font);
         graphics.setColor(Color.BLACK);
         merchantNameStringShow(graphics, "SO PSP KHR Supplier CO,. LTD SO PSP KHR");
-        amountStringShow(graphics, new Font("Inter",  Font.BOLD, 17*coefficient), "៛1,000,000,000,000,000,000", innerWidth*coefficient);
+        amountStringShow(graphics, new Font("Inter",  Font.BOLD, 17*coefficient), "៛1,000,000,000", innerWidth*coefficient);
         graphics.dispose();
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -93,7 +93,7 @@ public class ImageUtils {
     }
     protected static void merchantNameStringShow(Graphics2D graphics, String merchantName){
         String showString = StringUtils.removeStringWithLength(merchantName, 30) + "...";
-        graphics.drawString(showString, 15*2, 55*2);
+        graphics.drawString(showString, 15*2, 68*2);
     }
     protected static void amountStringShow(Graphics2D graphics, Font font, String amountUsing, int limitWidth){
         FontMetrics fontMetrics = graphics.getFontMetrics(font);
@@ -103,12 +103,12 @@ public class ImageUtils {
             //support more than 12 digit
             Font fontSupport = new Font("Inter", Font.BOLD, 14*2);
             graphics.setFont(fontSupport);
-            graphics.drawString(amountUsing, 15*2, 71*2);
+            graphics.drawString(amountUsing, 15*2, 88*2);
         }
         else
         {
             graphics.setFont(font);
-            graphics.drawString(amountUsing, 15*2, 71*2);
+            graphics.drawString(amountUsing, 15*2, 88*2);
         }
     }
 }

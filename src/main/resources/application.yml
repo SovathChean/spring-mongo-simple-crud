@@ -6,3 +6,5 @@ spring:
       uri: mongodb+srv://sovathc:vE4DChedB5sJs5NO@cluster0.y598ufq.mongodb.net/mongodb-spring-crud?retryWrites=true&w=majority
   jackson:
       property-naming-strategy: SNAKE_CASE
+  kafka:
+    bootstrap-servers: localhost:29092
