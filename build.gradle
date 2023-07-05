@@ -44,6 +44,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.kafka:spring-kafka'
 
+	implementation 'org.apache.pdfbox:pdfbox:2.0.28'
+	implementation 'org.apache.pdfbox:pdfbox-tools:2.0.25'
+
 	implementation 'org.springdoc:springdoc-openapi-ui:1.6.14'
 	compileOnly 'org.projectlombok:lombok'
 //	implementation 'com.itextpdf:itext7-core:7.2.4'

@@ -243,4 +243,11 @@ public class UserController implements AbstractController<UserItemResponse, User
     {
         telegramUtils.sendMessage(requestVO);
     }
+
+    @SneakyThrows
+    @PostMapping(value = "/createOrUpdate")
+    public void createOrUpdate(@RequestBody @Valid UserCreateOrUpdateRequest request)
+    {
+        this.service.createOrUpdate(request);
+    }
 }

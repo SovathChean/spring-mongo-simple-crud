@@ -1,6 +1,8 @@
 package com.sovathc.mongodemocrud.common.mapper;
 
 import com.sovathc.mongodemocrud.common.request.PageableRequest;
+import com.sovathc.mongodemocrud.user.web.vo.request.UserCreateOrUpdateRequest;
+import com.sovathc.mongodemocrud.user.web.vo.request.UserCreatedRequest;
 import org.mapstruct.MappingTarget;
 
 import java.util.List;
@@ -18,4 +20,5 @@ public interface AbstractMapper<ENTITY, DTO, ITEM_RESPONSE, RESPONSE, CREATED, U
     void createdToDto(CREATED created, @MappingTarget DTO dto);
     void updatedToDto(UPDATED updated, @MappingTarget DTO dto);
     void pagableToDto(PAGEABLE pageable, @MappingTarget DTO dto);
+    void listRequestTOEntity(List<UserCreatedRequest> dtos, @MappingTarget List<ENTITY> entityList);
 }

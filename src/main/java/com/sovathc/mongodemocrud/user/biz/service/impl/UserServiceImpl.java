@@ -9,9 +9,12 @@ import com.sovathc.mongodemocrud.user.biz.entity.UserEntity;
 import com.sovathc.mongodemocrud.user.biz.mapper.UserMapper;
 import com.sovathc.mongodemocrud.user.biz.service.PdfGeneratorService;
 import com.sovathc.mongodemocrud.user.biz.service.UserService;
+import com.sovathc.mongodemocrud.user.biz.service.repository.UserRepository;
 import com.sovathc.mongodemocrud.user.biz.service.support.UserServiceSupport;
+import com.sovathc.mongodemocrud.user.web.vo.request.UserCreateOrUpdateRequest;
 import com.sovathc.mongodemocrud.user.web.vo.request.UserPageableRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -33,12 +36,30 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
      private final MongoTemplate template;
      private final PdfGeneratorService pdfGeneratorService;
      private final PdfGeneratorUtils utils;
      private final UserServiceSupport support;
+     private final UserRepository userRepository;
+     @Override
+     public void createOrUpdate(UserCreateOrUpdateRequest requests)
+     {
+          List<UserEntity> entity = new ArrayList<>();
+          List<UserEntity> userEntityList = userRepository.findAllByUsername("idol");
+          List<UserEntity> userList = userRepository.findAll();
 
+          UserEntity testFilter = userEntityList.stream()
+                  .filter(user -> user.getUsername().equalsIgnoreCase("sovath"))
+                          .findAny().orElse(null);
+          UserEntity testFilter2 = userList.stream()
+                  .filter(user -> user.getUsername().equalsIgnoreCase("order_seq"))
+                  .findAny().orElse(null);
+
+          UserMapper.INSTANCE.listRequestTOEntity(requests.getUsers(), entity);
+          userRepository.saveAll(entity);
+     }
      @Override
      public UserDTO create(UserDTO dto) {
           UserEntity entity = new UserEntity();
