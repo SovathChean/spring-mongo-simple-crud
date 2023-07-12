@@ -20,7 +20,7 @@ public class QrCodeGenerator {
             throws WriterException, IOException {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         Hashtable hints = new Hashtable();
-        hints.put(EncodeHintType.CHARACTER_SET, "s");
+//        hints.put(EncodeHintType.CHARACTER_SET, "s");
         BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, width, height, hints);
 
 

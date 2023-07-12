@@ -64,6 +64,11 @@ dependencies {
 	compileOnly 'org.apache.commons:commons-lang3'
 	compileOnly 'org.apache.httpcomponents:httpclient'
 
+	//qrcode
+	implementation 'com.github.ben-manes.caffeine:caffeine:3.1.0'
+	implementation 'org.springframework.boot:spring-boot-starter-cache:3.1.0'
+	implementation 'org.springframework:spring-webflux:6.0.1'
+
 
 	annotationProcessor 'org.projectlombok:lombok'
 	implementation 'org.apache.commons:commons-lang3:3.12.0'
